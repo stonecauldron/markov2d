@@ -227,6 +227,11 @@ public class Kernel : System.Collections.IEnumerable
         }
         //*/
     }
+    public Kernel Clone()
+    {
+        int[,] newMatrix = (int[,]) matrix.Clone();
+        return new Kernel(newMatrix);
+    }
 
     public override bool Equals(object obj)
     {
