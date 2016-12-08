@@ -8,15 +8,12 @@ public class Main : MonoBehaviour {
 		string mapText = 
 			System.IO.File.ReadAllText("Assets/data/processed/elements/pallet-town-city.txt");
 		MapMatrix map = new MapMatrix(mapText);
-		int[,] kernel = {{0, 1, 1}, {1, 1, 1}, {0, 0, 0}};
+		int[,] kernel = {{0, 1, 0}, {1, 1, 0}, {0, 1, 0}};
 
 		Kernel k = new Kernel(kernel);
 		MarkovChain chain = map.CreateChain(k);
 		Debug.Log(chain.GenerateMap(20,20));
 
-		foreach (var foo in k.SubKernels())
-		{
-			Debug.Log(foo);
-		}
+		Debug.Log(k.GetHighestIndexDistance());
 	}
 }

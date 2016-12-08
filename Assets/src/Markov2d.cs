@@ -185,18 +185,7 @@ public class Kernel : System.Collections.IEnumerable
         List<Kernel> subList = new List<Kernel>();
 
         int dimension = matrix.GetLength(0);
-        for (int i = dimension - 1; i >= 0; i--)
-        {
-            for (int j = dimension - 1; j >= 0; j--)
-            {
-                if (matrix[i,j] == 1)
-                {
-                    int[,] newMatrix = (int[,]) matrix.Clone();
-                    newMatrix[i,j] = 0;
-                    subList = subList.Union(new Kernel(newMatrix).SubKernels()).ToList();
-                }
-            }
-        }
+
         List<Kernel> result = new List<Kernel>();
         result.Add(this);
         result = result.Union(subList).ToList();
@@ -227,6 +216,29 @@ public class Kernel : System.Collections.IEnumerable
         }
         //*/
     }
+
+    public int GetHighestIndexDistance()
+    {
+        int dimension = matrix.GetLength(0);
+
+        for (int d = dimension - 1; d >= 0; d--)
+        {
+            // take care of diagonal case
+            if (matrix[d,d] == 1)
+            {
+                return d;
+            }
+            for (int i = 0; i < d; i++)
+            {
+                if ((d - i != i) && matrix[d - i, i] == 1)
+                {
+                    return d;
+                }
+            }
+        }
+        return -1;
+    }
+
     public Kernel Clone()
     {
         int[,] newMatrix = (int[,]) matrix.Clone();
