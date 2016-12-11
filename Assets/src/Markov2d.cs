@@ -182,11 +182,29 @@ public class Kernel : System.Collections.IEnumerable
             return zeros;
         }
 
+
+        // find largest distance index
+        int d = GetHighestIndexDistance();
+        // get all the indices at this distance that are equal to one
+        List<Index> indices = GetIndicesAtDistance(d)
+                              .Where(index => matrix[index.i, index.j] == 1)
+                              .ToList();
         List<Kernel> subList = new List<Kernel>();
+
+        foreach (var index in indices)
+        {
+            int[,] newMatrix = (int[,]) matrix.Clone();
+            newMatrix[index.i, index.j] = 0;
+            Kernel k = new Kernel(newMatrix);
+            subList = subList.Union(k.SubKernels()).ToList();
+        }
 
         List<Kernel> result = new List<Kernel>();
         result.Add(this);
         result = result.Union(subList).ToList();
+
+        // sort result by number of predecessors
+        result = result.OrderByDescending(k => k.numberPredecessors).ToList();
 
         // memoization
         memoizeDict.Add(this, result);
