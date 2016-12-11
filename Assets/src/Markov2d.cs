@@ -41,9 +41,9 @@ public class MapMatrix
         {
             for (int j = 0; j < M; j++)
             {
-                foreach (int[,] kernel in k)
+                foreach (Kernel kernel in k.SubKernels())
                 {
-                    PredecessorMatrix preds = GetPredecessors(kernel, i, j);
+                    PredecessorMatrix preds = GetPredecessors(kernel.matrix, i, j);
                     char tile = data[i,j];
                     mt.IncrementCount(preds, tile);
                 }
@@ -122,9 +122,9 @@ public class MarkovChain
 
     char NextTile(int x, int y)
     {
-        foreach (int[,] kernel in k)
+        foreach (Kernel kernel in k.SubKernels())
         {
-            PredecessorMatrix preds = map.GetPredecessors(kernel, x, y);
+            PredecessorMatrix preds = map.GetPredecessors(kernel.matrix, x, y);
             if (!marginals.table.ContainsKey(preds))
             {
                 // if it does not contain this predecessor take a smaller one
@@ -148,11 +148,11 @@ public class MarkovChain
                 }
             }
         }
-        return 'X'; // something wrong happenned
+        return 'X'; // something wrong happened
     }
 }
 
-public class Kernel : System.Collections.IEnumerable
+public class Kernel
 {
     internal int[,] matrix;
     internal int numberPredecessors;
@@ -210,27 +210,6 @@ public class Kernel : System.Collections.IEnumerable
         memoizeDict.Add(this, result);
 
         return result;
-    }
-
-    public System.Collections.IEnumerator GetEnumerator()
-    {
-        yield return matrix;
-
-        /**
-        int dimension = matrix.GetLength(0);
-        for (int i = dimension - 1;  i >= 0; i--)
-        {
-            for (int j = dimension - 1; j >= 0; j--)
-            {
-                int[,] newMatrix = (int[,]) matrix.Clone();
-                if (newMatrix[i,j] == 1)
-                {
-                    newMatrix[i,j] = 0;
-                    yield return newMatrix;
-                }
-            }
-        }
-        //*/
     }
 
     List<Index> GetIndicesAtDistance(int d)
