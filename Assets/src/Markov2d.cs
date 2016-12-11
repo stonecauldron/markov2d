@@ -184,8 +184,6 @@ public class Kernel : System.Collections.IEnumerable
 
         List<Kernel> subList = new List<Kernel>();
 
-        int dimension = matrix.GetLength(0);
-
         List<Kernel> result = new List<Kernel>();
         result.Add(this);
         result = result.Union(subList).ToList();
@@ -221,22 +219,23 @@ public class Kernel : System.Collections.IEnumerable
     {
         int dimension = matrix.GetLength(0);
 
-        for (int d = dimension - 1; d >= 0; d--)
+        for (int d = dimension - 1; d > 0; d--)
         {
-            // take care of diagonal case
             if (matrix[d,d] == 1)
             {
                 return d;
             }
-            for (int i = 0; i < d; i++)
+            for (int i = 1; i <= d; i++)
             {
-                if ((d - i != i) && matrix[d - i, i] == 1)
+                if (matrix[d - i, d] == 1 ||
+                    matrix[d, d - i] == 1)
                 {
                     return d;
                 }
             }
         }
-        return -1;
+
+        return 0;
     }
 
     public Kernel Clone()
