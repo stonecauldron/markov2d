@@ -215,23 +215,33 @@ public class Kernel : System.Collections.IEnumerable
         //*/
     }
 
+    List<Index> GetIndicesAtDistance(int d)
+    {
+        List<Index> result = new List<Index>();
+        result.Add(new Index(d, d));
+
+        for (int i = 1; i <= d; i++)
+        {
+            result.Add(new Index(d - i, d));
+            result.Add(new Index(d, d - i));
+        }
+
+        return result;
+    }
+
     public int GetHighestIndexDistance()
     {
         int dimension = matrix.GetLength(0);
 
         for (int d = dimension - 1; d > 0; d--)
         {
-            if (matrix[d,d] == 1)
+            List<Index> indices = GetIndicesAtDistance(d);
+            int nbElements = indices.Select(index => matrix[index.i, index.j])
+                                    .Where(v => v == 1)
+                                    .Count();
+            if (nbElements > 0)
             {
                 return d;
-            }
-            for (int i = 1; i <= d; i++)
-            {
-                if (matrix[d - i, d] == 1 ||
-                    matrix[d, d - i] == 1)
-                {
-                    return d;
-                }
             }
         }
 
