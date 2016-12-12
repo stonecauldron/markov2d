@@ -49,7 +49,6 @@ public class MapMatrix
                 }
             }
         }
-        UnityEngine.Debug.Log(mt);
         return new MarkovChain(k, mt);
     }
 
@@ -378,7 +377,12 @@ class PredecessorMatrix
 
     public override int GetHashCode()
     {
-        return data[0, 0].GetHashCode();
+        int result = 0;
+        foreach (char c in data)
+        {
+            result += c.GetHashCode();
+        }
+        return result;
     }
 
     public override string ToString()
