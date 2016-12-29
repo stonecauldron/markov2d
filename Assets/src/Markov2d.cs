@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 public class MapMatrix
 {
-    public char[,] data { get; private set; }
+    internal char[,] data { get; private set; }
 
     int N, M;
 
-    public MapMatrix(string mapString)
+    internal MapMatrix(string mapString)
     {
         string[] lines = mapString.Split('\n');
 
@@ -26,7 +26,7 @@ public class MapMatrix
         M = nbCols;
     }
 
-    public MapMatrix(int width, int height)
+    internal MapMatrix(int width, int height)
     {
         data = new char[width,height];
         N = width;
@@ -154,7 +154,7 @@ public class MarkovChain
 public class Kernel
 {
     internal int[,] matrix;
-    internal int numberPredecessors;
+    int numberPredecessors;
 
     static Dictionary<Kernel,List<Kernel>> memoizeDict = new Dictionary<Kernel,List<Kernel>>();
 
@@ -167,7 +167,7 @@ public class Kernel
                                 .Count();
     } 
 
-    public List<Kernel> SubKernels()
+    internal List<Kernel> SubKernels()
     {
         if (memoizeDict.ContainsKey(this))
         {
@@ -225,7 +225,7 @@ public class Kernel
         return result;
     }
 
-    public int GetHighestIndexDistance()
+    int GetHighestIndexDistance()
     {
         int dimension = matrix.GetLength(0);
 
@@ -244,7 +244,7 @@ public class Kernel
         return 0;
     }
 
-    public Kernel Clone()
+    Kernel Clone()
     {
         int[,] newMatrix = (int[,]) matrix.Clone();
         return new Kernel(newMatrix);
@@ -310,7 +310,7 @@ public class Kernel
     }
 }
 
-public class KernelComparer : IEqualityComparer<Kernel>
+class KernelComparer : IEqualityComparer<Kernel>
 {
     public bool Equals(Kernel x, Kernel y)
     {
@@ -328,10 +328,10 @@ public class KernelComparer : IEqualityComparer<Kernel>
 
 class PredecessorMatrix
 {
-    public char[,] data { get; private set; }
-    public int size { get; }
+    internal char[,] data { get; private set; }
+    int size { get; }
 
-    public PredecessorMatrix(int size)
+    internal PredecessorMatrix(int size)
     {
         this.data = new char[size, size];
         this.size = size;
@@ -403,14 +403,14 @@ class PredecessorMatrix
 
 class MarginalsTable
 {
-    public Dictionary<PredecessorMatrix, TileCounts> table { get; }
+    internal Dictionary<PredecessorMatrix, TileCounts> table { get; }
 
-    public MarginalsTable()
+    internal MarginalsTable()
     {
         table = new Dictionary<PredecessorMatrix, TileCounts>();
     }
 
-    public void IncrementCount(PredecessorMatrix pred, char tile)
+    internal void IncrementCount(PredecessorMatrix pred, char tile)
     {
         if (table.ContainsKey(pred))
         {
@@ -439,19 +439,19 @@ class MarginalsTable
 
 class TileCounts
 {
-    public List<TileCountPair> list { get; private set; }
+    internal List<TileCountPair> list { get; private set; }
 
-    public TileCounts()
+    internal TileCounts()
     {
         list = new List<TileCountPair>();
     }
 
-    public int Count()
+    internal int Count()
     {
         return list.Count;
     }
 
-    public void IncrementCount(char tile)
+    internal void IncrementCount(char tile)
     {
         int index = list.FindIndex(x => x.tile == tile);
         if (index >= 0)
@@ -465,7 +465,7 @@ class TileCounts
         }
     }
 
-    public void Add(TileCountPair tc)
+    internal void Add(TileCountPair tc)
     {
         list.Add(tc);
     }
@@ -485,16 +485,16 @@ class TileCounts
 
 struct TileCountPair
 {
-    public char tile { get; }
-    public int count { get; }
+    internal char tile { get; }
+    internal int count { get; }
 
-    public TileCountPair(char t, int c)
+    internal TileCountPair(char t, int c)
     {
         tile = t;
         count = c;
     }
 
-    public TileCountPair IncrementCount()
+    internal TileCountPair IncrementCount()
     {
         return new TileCountPair(tile, count + 1);
     }
@@ -507,9 +507,9 @@ struct TileCountPair
 
 struct Index
 {
-    public int i, j;
+    internal int i, j;
 
-    public Index(int x, int y)
+    internal Index(int x, int y)
     {
         i = x;
         j = y;
