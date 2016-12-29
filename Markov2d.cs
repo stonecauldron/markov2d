@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 
-public class MapMatrix
+class MapMatrix
 {
     internal char[,] data { get; private set; }
 
@@ -33,7 +33,7 @@ public class MapMatrix
         M = height;
     }
 
-    public MarkovChain CreateChain(Kernel k)
+    internal MarkovChain CreateChain(Kernel k)
     {
         MarginalsTable mt = new MarginalsTable();
 
@@ -98,13 +98,20 @@ public class MarkovChain
     MarginalsTable marginals;
     Kernel k;
 
+    public static MarkovChain CreateChain(string mapText, int[,] kernel)
+    {
+        MapMatrix map = new MapMatrix(mapText);
+        Kernel k = new Kernel(kernel);
+        return map.CreateChain(k);
+    }
+
     internal MarkovChain(Kernel k, MarginalsTable mt)
     {
         this.k = k;
         marginals = mt;
     }
 
-    public MapMatrix GenerateMap(int width, int height)
+    public string GenerateMap(int width, int height)
     {
         map = new MapMatrix(width, height);
         
@@ -116,7 +123,7 @@ public class MarkovChain
             }
         }
 
-        return map;
+        return map.ToString();
     }
 
     char NextTile(int x, int y)
