@@ -33,10 +33,8 @@ class MapMatrix
         M = height;
     }
 
-    internal MarkovChain CreateChain(Kernel k)
+    internal void Learn(MarginalsTable mt, Kernel k)
     {
-        MarginalsTable mt = new MarginalsTable();
-
         for (int i = 0; i < N; i++)
         {
             for (int j = 0; j < M; j++)
@@ -49,7 +47,6 @@ class MapMatrix
                 }
             }
         }
-        return new MarkovChain(k, mt);
     }
 
     public override string ToString()
@@ -98,11 +95,20 @@ public class MarkovChain
     MarginalsTable marginals;
     Kernel k;
 
-    public static MarkovChain CreateChain(string mapText, int[,] kernel)
+    public static MarkovChain CreateChain(List<string> mapTexts, int[,] kernel)
     {
-        MapMatrix map = new MapMatrix(mapText);
+        if (mapTexts.Count() == 0)
+        {
+            throw new ArgumentException("Please provide at least one map");
+        }
+
+        MarginalsTable mt = new MarginalsTable();
         Kernel k = new Kernel(kernel);
-        return map.CreateChain(k);
+
+        List<MapMatrix> maps = mapTexts.Select(x => new MapMatrix(x)).ToList();
+        maps.ForEach(x => x.Learn(mt, k));
+
+        return new MarkovChain(k, mt);
     }
 
     internal MarkovChain(Kernel k, MarginalsTable mt)

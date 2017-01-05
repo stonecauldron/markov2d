@@ -1,4 +1,6 @@
-﻿class Program
+﻿using System.Collections.Generic;
+
+class Program
 {
     static void Main(string[] args)
     {
@@ -7,12 +9,18 @@
 
         string mapText = System.IO.File.ReadAllText(inputFile);
 
-        int[,] kernel = {{0, 1, 1, 1},
-						 {1, 1, 1, 0},
-						 {1, 1, 1, 0},
-                         {1, 0, 0, 1}};
+        int[,] kernel = {{0, 1, 1},
+						 {1, 1, 1},
+                         {1, 1, 1}};
 
-        MarkovChain chain = MarkovChain.CreateChain(mapText, kernel);
+        List<string> maps = new List<string>();
+        maps.Add(mapText);
+        maps.Add(mapText);
+        maps.Add(mapText);
+        maps.Add(mapText);
+        maps.Add(mapText);
+
+        MarkovChain chain = MarkovChain.CreateChain(maps, kernel);
 
         string generatedMap = chain.GenerateMap(40, 40);
 
