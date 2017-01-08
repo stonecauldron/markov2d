@@ -4,26 +4,27 @@ class Program
 {
     static void Main(string[] args)
     {
-        string inputFile = args[0];
-        string outputFile = args[1];
-
-        string mapText = System.IO.File.ReadAllText(inputFile);
+        string outputPrefix = "generated/";
 
         int[,] kernel = {{0, 1, 1},
 						 {1, 1, 1},
                          {1, 1, 1}};
+        int nbMaps = 100;
 
         List<string> maps = new List<string>();
-        maps.Add(mapText);
-        maps.Add(mapText);
-        maps.Add(mapText);
-        maps.Add(mapText);
-        maps.Add(mapText);
+
+        foreach (string file in args)
+        {
+            maps.Add(System.IO.File.ReadAllText(file));
+        }
 
         MarkovChain chain = MarkovChain.CreateChain(maps, kernel);
 
-        string generatedMap = chain.GenerateMap(40, 40);
-
-        System.IO.File.WriteAllText(outputFile, generatedMap);
+        for (int i = 0; i < nbMaps; i++)
+        {
+            string generatedMap = chain.GenerateMap(50, 40);
+            string outputFile = outputPrefix + i + ".txt";
+            System.IO.File.WriteAllText(outputFile, generatedMap);
+        }
     }
 }
