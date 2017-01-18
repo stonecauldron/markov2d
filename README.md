@@ -1,6 +1,8 @@
 # markov2d
 A command line tool for generating tile-maps with 2D Markov chains
 
+![Example map generated with markov2d](examples/generated/image/2.png)
+
 ## Installation 
 You first need to install the [dotnet platform](https://www.microsoft.com/net/core/platform).
 
